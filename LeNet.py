@@ -20,24 +20,36 @@ class Net(nn.Module):
 
 
     def forward(self, x):
-        #get max value from each 2x2 window, zero out all negative values 
+        #get max value from each 2x2 window, zero out all negative values
         x = F.avg_pool2d(F.relu(self.conv1(x)), 2)
         x = F.avg_pool2d(F.relu(self.conv2(x)), 2)
+        #flatten the matrix to a single array
+        x = x.view(-1, self.num_flat_features(x))
         #forward propagation through fully connected layers
-        x = x.view(-1,self.num_flat_features)
-        x = F.relu(self.fc1(x)) 
+        #using relu activation function
+        x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
+        return x
 
-    def num_flat_features(self,x):
+    def num_flat_features(self, x):
         size = x.size()[1:] # all dimensions except the batch dimension
         num_features = 1
         for s in size:
-            num_featurs *= s
+            num_features *= s
         return num_features
 
+# instantiate neural network
 net = Net()
 print(net)
-params = list(net.parameters())
-print(len(params))
-print(params[0].size())
+
+# generate a random image
+input_image = torch.randn(1, 1, 28, 28)
+# feed input though network
+out = net(input_image)
+print(out)
+
+# zero the gradient buffers of all parameters and backprops
+net.zero_grad()
+# fill gradient buffers of all parameters and backprops with random numbers
+out.backward(torch.randn(1,10))
