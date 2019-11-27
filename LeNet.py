@@ -51,5 +51,21 @@ print(out)
 
 # zero the gradient buffers of all parameters and backprops
 net.zero_grad()
-# fill gradient buffers of all parameters and backprops with random numbers
-out.backward(torch.randn(1,10))
+# calculate all of the gradients for each parameter and accumulate with previous value.
+# backward parameter is cost function (maybe?)
+out.backward(torch.randn(1, 10))
+
+output = net(input_image)   # propogate input through the neural network
+target = torch.randn(10)    # expected result ex. [0,0,1,0,0,0,0,0,0,0] for 2
+target = target.view(1, -1)  # make it the same shape as output
+criterion = nn.MSELoss() # creating a mean squared error object
+
+# Puts output and target into criterion object which then calculates sum of (output-target)^2
+loss = criterion(output, target)
+print(loss)
+
+# when tensor is propogated through any layer or function,
+# grad_fn object is update to keep track of the path
+print(loss.grad_fn) # prints address MSELoss
+print(loss.grad_fn.next_functions[0][0])    # Linear
+print(loss.grad_fn.next_functions[0][0].next_functions[0][0])   # ReLU
