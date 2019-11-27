@@ -40,21 +40,5 @@ class Net(nn.Module):
             num_features *= s
         return num_features
 
-# instantiate neural network
-net = Net()
-print(net)
-
-input_image = torch.randn(1, 1, 28, 28) # generate a random image
-output = net(input_image)   # propogate input through the neural network
-target = torch.randn(10)    # expected result ex. [0,0,1,0,0,0,0,0,0,0] for 2
-target = target.view(1, -1)  # make it the same shape as output
-criterion = nn.MSELoss() # creating a mean squared error object
-
-# set up optimizer for SGD and pass network parameters and learning rate
-optimizer = optim.SGD(net.parameters(), lr=0.01)
-
-optimizer.zero_grad()  # zeros the gradient buffers
-output = net(input_image)  # propogate input image through neural network
-loss = criterion(output, target) # Puts output and target into criterion object, MSE
-loss.backward()  # calculate the gradient of each parameter based on the MSE loss function
-optimizer.step()  # Does the update
+if __name__ == "__main__":
+    pass
