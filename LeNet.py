@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
 
 class Net(nn.Module):
     def __init__(self):
@@ -43,29 +44,17 @@ class Net(nn.Module):
 net = Net()
 print(net)
 
-# generate a random image
-input_image = torch.randn(1, 1, 28, 28)
-# feed input though network
-out = net(input_image)
-print(out)
-
-# zero the gradient buffers of all parameters and backprops
-net.zero_grad()
-# calculate all of the gradients for each parameter and accumulate with previous value.
-# backward parameter is cost function (maybe?)
-out.backward(torch.randn(1, 10))
-
+input_image = torch.randn(1, 1, 28, 28) # generate a random image
 output = net(input_image)   # propogate input through the neural network
 target = torch.randn(10)    # expected result ex. [0,0,1,0,0,0,0,0,0,0] for 2
 target = target.view(1, -1)  # make it the same shape as output
 criterion = nn.MSELoss() # creating a mean squared error object
 
-# Puts output and target into criterion object which then calculates sum of (output-target)^2
-loss = criterion(output, target)
-print(loss)
+# set up optimizer for SGD and pass network parameters and learning rate
+optimizer = optim.SGD(net.parameters(), lr=0.01)
 
-# when tensor is propogated through any layer or function,
-# grad_fn object is update to keep track of the path
-print(loss.grad_fn) # prints address MSELoss
-print(loss.grad_fn.next_functions[0][0])    # Linear
-print(loss.grad_fn.next_functions[0][0].next_functions[0][0])   # ReLU
+optimizer.zero_grad()  # zeros the gradient buffers
+output = net(input_image)  # propogate input image through neural network
+loss = criterion(output, target) # Puts output and target into criterion object, MSE
+loss.backward()  # calculate the gradient of each parameter based on the MSE loss function
+optimizer.step()  # Does the update
