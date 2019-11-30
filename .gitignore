@@ -2,7 +2,7 @@
 # dataset
 /data/*
 # models
-/models/*.pth
+/models/*
 
 # vscode
 /.vscode/*
