@@ -23,6 +23,12 @@ def train(net: Net, model_name='mnist_lenet'):
     #load train set, with 4 samples per minibatch, randomize images and use 2 threads
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers=2)
 
+    # enable GPU training
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    net.to(device)  # send network to device
+    print(device)
+
+
     #print the neural network
     print(net)
 
@@ -36,7 +42,7 @@ def train(net: Net, model_name='mnist_lenet'):
         # iterate through the training set
         for i, data in enumerate(trainloader, 0):
             # get the input and the label
-            inputs, labels = data
+            inputs, labels = data[0].to(device), data[1].to(device)
 
             optimizer.zero_grad()  # zeros the gradient buffers
 
