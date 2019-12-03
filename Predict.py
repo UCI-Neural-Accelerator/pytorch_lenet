@@ -5,7 +5,7 @@ import torchvision.transforms as transforms
 from LeNet import Net
 
 
-def predict():
+def predict(net: Net, model_name='mnist_lenet'):
     
     # Create the transformation to prepare the image
     transform = transforms.Compose(
@@ -23,9 +23,8 @@ def predict():
     #load test set with 4 samples per minibatch and 2 threads
     testloader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False, num_workers=2)
 
-    # Create and load the trained model
-    net = Net()
-    net.load_state_dict(torch.load('./models/mnist_lenet.pth'))
+    # Load the trained model
+    net.load_state_dict(torch.load('./models/' + model_name + '.pth'))
 
     correct = 0
     total = 0
@@ -40,6 +39,9 @@ def predict():
             correct += (prediction == labels).sum().item()
 
     print('Accuracy on %d test images: %.2f %%' % (total, 100 * correct / total))
+    return (100 * correct / total)
+
 
 if (__name__ == '__main__'):
-    predict()
+    net = Net()
+    predict(net)

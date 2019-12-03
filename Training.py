@@ -6,7 +6,7 @@ import torchvision.transforms as transforms
 
 from LeNet import Net
 
-def train():
+def train(net: Net, model_name='mnist_lenet'):
     # Create the transformation to prepare the image
     transform = transforms.Compose(
         [
@@ -23,8 +23,7 @@ def train():
     #load train set, with 4 samples per minibatch, randomize images and use 2 threads
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers=2)
 
-    # instantiate neural network
-    net = Net()
+    #print the neural network
     print(net)
 
     criterion = nn.CrossEntropyLoss() # creating a mean squared error object (try other loss functions)
@@ -54,7 +53,8 @@ def train():
     print('--~~ Finished Training ~~--\n')
 
     print('Saving Model')
-    torch.save(net.state_dict(), './models/mnist_lenet.pth')
+    torch.save(net.state_dict(), './models/' + model_name + '.pth')
 
 if (__name__ == '__main__'):
-    train()
+    net = Net()
+    train(net)
