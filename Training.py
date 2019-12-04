@@ -1,3 +1,4 @@
+import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -6,8 +7,11 @@ import torchvision.transforms as transforms
 
 from LeNet import Net
 
+def train(net=None, model_name='mnist_lenet', gpu_train=False):
+    # check if net was passed in
+    if net == None:
+        net = Net()
 
-def train():
     # Create the transformation to prepare the image
     transform = transforms.Compose(
         [
@@ -24,21 +28,31 @@ def train():
     #load train set, with 4 samples per minibatch, randomize images and use 2 threads
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers=2)
 
-    # instantiate neural network
-    net = Net()
+    # enable GPU training
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    if gpu_train == True:
+        net.to(device)  # send network to device
+        print('Training on %s\n' % device)
+
+    #print the neural network
     print(net)
 
     criterion = nn.CrossEntropyLoss() # creating a mean squared error object (try other loss functions)
     # set up optimizer for SGD and pass network parameters and learning rate
     optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.5)
 
-    for epoch in range(1):  # iterate over dataset multiple times
+    start_time = time.time()
+
+    for epoch in range(2):  # iterate over dataset multiple times
 
         running_loss = 0.0  # running total of the cost function for output
         # iterate through the training set
         for i, data in enumerate(trainloader, 0):
             # get the input and the label
-            inputs, labels = data
+            if gpu_train == True:
+                inputs, labels = data[0].to(device), data[1].to(device)
+            else:
+                inputs, labels = data
 
             optimizer.zero_grad()  # zeros the gradient buffers
 
@@ -52,10 +66,11 @@ def train():
                 print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, (running_loss / 200)))
                 running_loss = 0.0
 
-    print('--~~ Finished Training ~~--\n')
+    duration = time.time() - start_time
+    print('--~~ Finished Training ~~--\nTrained in %.2f seconds' % duration)
 
     print('Saving Model')
-    torch.save(net.state_dict(), './models/mnist_lenet.pth')
+    torch.save(net.state_dict(), './models/' + model_name + '.pth')
 
     #print('Print weights\n')
     #weights = list(net.conv1.parameters())

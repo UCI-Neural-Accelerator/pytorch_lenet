@@ -4,20 +4,20 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self, kernel_size=5, conv_output_size=4, fc1_size=120, fc2_size=84):
         super(Net, self).__init__() # call the init of the nn.Module
         # Create the structure of the LeNet-5 network
         # 1 input image channel, 6 output channels, 5x5 square convultion
-        self.conv1 = nn.Conv2d(1, 6, 5)
+        self.conv1 = nn.Conv2d(1, 6, kernel_size)
         # 6 input, 16 output, 5x5 square convolution
-        self.conv2 = nn.Conv2d(6, 16, 5)  # Change to follow LeNet 5 model later
+        self.conv2 = nn.Conv2d(6, 16, kernel_size)  # Change to follow LeNet 5 model later
         # fully conneted (linear y = Wx +b)
         # 16 6x6 images input, 120 neuron output
-        self.fc1 = nn.Linear(16 * 4 * 4, 120)
+        self.fc1 = nn.Linear(16 * conv_output_size * conv_output_size, fc1_size)
         # 120 input, 84 output
-        self.fc2 = nn.Linear(120, 84)
+        self.fc2 = nn.Linear(fc1_size, fc2_size)
         # 84 input, 10 output
-        self.fc3 = nn.Linear(84, 10)
+        self.fc3 = nn.Linear(fc2_size, 10)
 
 
     def forward(self, x):
