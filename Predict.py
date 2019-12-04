@@ -5,7 +5,10 @@ import torchvision.transforms as transforms
 from LeNet import Net
 
 
-def predict(net: Net, model_name='mnist_lenet'):
+def predict(net=None, model_name='mnist_lenet'):
+    # check if net was passed in
+    if net == None:
+        net = Net()
     
     # Create the transformation to prepare the image
     transform = transforms.Compose(
@@ -43,5 +46,4 @@ def predict(net: Net, model_name='mnist_lenet'):
 
 
 if (__name__ == '__main__'):
-    net = Net()
-    predict(net)
+    predict()

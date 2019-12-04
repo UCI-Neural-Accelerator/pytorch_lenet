@@ -7,7 +7,11 @@ import torchvision.transforms as transforms
 
 from LeNet import Net
 
-def train(net: Net, model_name='mnist_lenet', gpu_train=False):
+def train(net=None, model_name='mnist_lenet', gpu_train=False):
+    # check if net was passed in
+    if net == None:
+        net = Net()
+
     # Create the transformation to prepare the image
     transform = transforms.Compose(
         [
@@ -69,5 +73,4 @@ def train(net: Net, model_name='mnist_lenet', gpu_train=False):
     torch.save(net.state_dict(), './models/' + model_name + '.pth')
 
 if (__name__ == '__main__'):
-    net = Net()
-    train(net)
+    train()
