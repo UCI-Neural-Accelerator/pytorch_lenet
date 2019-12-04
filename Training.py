@@ -6,6 +6,7 @@ import torchvision.transforms as transforms
 
 from LeNet import Net
 
+
 def train():
     # Create the transformation to prepare the image
     transform = transforms.Compose(
@@ -31,7 +32,7 @@ def train():
     # set up optimizer for SGD and pass network parameters and learning rate
     optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.5)
 
-    for epoch in range(2):  # iterate over dataset multiple times
+    for epoch in range(1):  # iterate over dataset multiple times
 
         running_loss = 0.0  # running total of the cost function for output
         # iterate through the training set
@@ -55,6 +56,13 @@ def train():
 
     print('Saving Model')
     torch.save(net.state_dict(), './models/mnist_lenet.pth')
+
+    #print('Print weights\n')
+    #weights = list(net.conv1.parameters())
+    #print(weights) 
+
+    
+
 
 if (__name__ == '__main__'):
     train()

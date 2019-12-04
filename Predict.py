@@ -3,7 +3,7 @@ import torchvision
 import torchvision.transforms as transforms
 
 from LeNet import Net
-
+from extractWeights import listWeights
 
 def predict():
     
@@ -25,7 +25,7 @@ def predict():
 
     # Create and load the trained model
     net = Net()
-    net.load_state_dict(torch.load('./models/mnist_lenet.pth'))
+    net.load_state_dict(torch.load('./models/mnist_lenet_top.pth'))
 
     correct = 0
     total = 0
@@ -40,6 +40,9 @@ def predict():
             correct += (prediction == labels).sum().item()
 
     print('Accuracy on %d test images: %.2f %%' % (total, 100 * correct / total))
+
+    print('Print weights\n')
+    listWeights(net)
 
 if (__name__ == '__main__'):
     predict()
