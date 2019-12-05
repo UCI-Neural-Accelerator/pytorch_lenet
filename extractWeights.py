@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from LeNet import Net
 
-def listWeights(net):
+def list_weights(net):
     w = torch.flatten(list(net.conv1.parameters())[0]).detach().numpy()
     print(w)
     print("Min: {}\nMax: {}\nStd: {}\nSize:{}".format(np.min(w), np.max(w), np.std(w), w.size))
@@ -37,3 +37,7 @@ def listWeights(net):
     print("Min: {}\nMax: {}\nStd: {}\nSize:{}".format(np.min(w), np.max(w), np.std(w), w.size))
     plt.hist(w)
     plt.show()
+
+
+if __name__ is '__main__':
+    list_weights()

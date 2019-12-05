@@ -44,9 +44,9 @@ def predict(net=None, model_name='mnist_lenet'):
     print('Accuracy on %d test images: %.2f %%' % (total, 100 * correct / total))
     return (100 * correct / total)
 
-
     print('Print weights\n')
-    listWeights(net)
+    list_weights(net)
+
 
 if (__name__ == '__main__'):
     predict()

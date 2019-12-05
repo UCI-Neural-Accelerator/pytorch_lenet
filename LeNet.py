@@ -20,18 +20,22 @@ class Net(nn.Module):
         self.fc3 = nn.Linear(fc2_size, 10)
 
 
-    def forward(self, x):
+    def forward(self, x, return_layer_out=False):
         #get max value from each 2x2 window, zero out all negative values
-        x = F.avg_pool2d(F.relu(self.conv1(x)), 2)
-        x = F.avg_pool2d(F.relu(self.conv2(x)), 2)
+        conv1_out = F.avg_pool2d(F.relu(self.conv1(x)), 2)
+        conv2_out = F.avg_pool2d(F.relu(self.conv2(conv1_out)), 2)
         #flatten the matrix to a single array
-        x = x.view(-1, self.num_flat_features(x))
+        flat = conv2_out.view(-1, self.num_flat_features(conv2_out))
         #forward propagation through fully connected layers
         #using relu activation function
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+        fc1_out = F.relu(self.fc1(flat))
+        fc2_out = F.relu(self.fc2(fc1_out))
+        output = self.fc3(fc2_out)
+        if return_layer_out == True:
+            return conv1_out, conv2_out, fc1_out, fc2_out, output
+        else:
+            return output
+
 
     def num_flat_features(self, x):
         size = x.size()[1:] # all dimensions except the batch dimension
@@ -39,6 +43,7 @@ class Net(nn.Module):
         for s in size:
             num_features *= s
         return num_features
+        
 
 if __name__ == "__main__":
     pass
