@@ -3,9 +3,10 @@ import torchvision
 import torchvision.transforms as transforms
 
 from LeNet import Net
-from extractWeights import listWeights
+from ExtractWeights import list_weights
+from ExtractOutputs import list_outputs
 
-def predict(net=None, model_name='mnist_lenet'):
+def predict(net=None, model_name='mnist_lenet', get_weights=False, get_outputs=False):
     # check if net was passed in
     if net == None:
         net = Net()
@@ -42,11 +43,17 @@ def predict(net=None, model_name='mnist_lenet'):
             correct += (prediction == labels).sum().item()
 
     print('Accuracy on %d test images: %.2f %%' % (total, 100 * correct / total))
-    return (100 * correct / total)
 
-    print('Print weights\n')
-    list_weights(net)
+    if get_weights == True:
+        print('Print weights\n')
+        list_weights(net)
+
+    if get_outputs == True:
+        print('Print outputs\n')
+        list_outputs(net)
+
+    return (100 * correct / total)
 
 
 if (__name__ == '__main__'):
-    predict()
+    predict(get_outputs=True)

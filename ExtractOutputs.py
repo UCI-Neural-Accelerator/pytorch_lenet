@@ -39,6 +39,7 @@ def list_outputs(net=None, model_name='mnist_lenet'):
     layer_outputs = net.forward(inputs, return_layer_out=True)
 
     # iterate throug the layers
+    layer_number = 1
     for layer in layer_outputs:
         # detaches gradient parameter, converts tensor to numpy array, and returns first image in batch
         output = layer.detach().numpy()[0]
@@ -46,12 +47,14 @@ def list_outputs(net=None, model_name='mnist_lenet'):
         output = output.flatten()
         
         # Print statistics
-        print("Min: {}\nMax: {}\nStd: {}\nSize:{}".format(np.min(output), np.max(output), np.std(output), output.size))
+        print("\nLayer: {}\nMin: {}\nMax: {}\nStd: {}\nSize:{}".format(layer_number, np.min(output), np.max(output), np.std(output), output.size))
 
         # plot histogram
         plt.hist(output)
         plt.show()
-        
+
+        layer_number += 1
+
 
 if __name__ == '__main__':
-    list_outputs(model_name='mnist_lenet_top')
+    list_outputs()
