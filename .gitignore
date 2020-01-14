@@ -3,6 +3,8 @@
 /data/*
 # models
 /models/*
+# images
+*.png
 
 # vscode
 /.vscode/*

@@ -47,7 +47,7 @@ def list_outputs(net=None, model_name='mnist_lenet'):
         output = output.flatten()
         
         # Print statistics
-        print("\nLayer: {}\nMin: {}\nMax: {}\nStd: {}\nSize:{}".format(layer_number, np.min(output), np.max(output), np.std(output), output.size))
+        print("\nLayer: {}\nMin: {}\nMax: {}\nMean: {}\nStd: {}\nSize:{}".format(layer_number, np.min(output), np.max(output), np.mean(output), np.std(output), output.size))
 
         # plot histogram
         plt.hist(output)

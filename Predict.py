@@ -56,4 +56,4 @@ def predict(net=None, model_name='mnist_lenet', get_weights=False, get_outputs=F
 
 
 if (__name__ == '__main__'):
-    predict(get_outputs=True)
+    predict(get_outputs=True, get_weights=True, model_name='mnist_lenet_top')
